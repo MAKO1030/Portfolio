@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>一瞬で数えろ！ | FLASH COUNT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500;700&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <div class="bg-decor">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <a href="../index.html" class="back-to-portal">← MAKOの遊び場へ戻る</a>
+
+    <div class="game-container">
+        <header>
+            <h1>一瞬で<span>数えろ！</span></h1>
+            <p class="game-desc">画面に一瞬だけ現れる点の数を素早く正確にカウントしよう！</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">STAGE</span>
+                <span class="stat-value" id="stage-val">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">TIME</span>
+                <span class="stat-value" id="time-val">1.0s</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">LIVES</span>
+                <span class="stat-value lives-value" id="lives-val">♥♥♥</span>
+            </div>
+        </div>
+
+        <div class="stage-box">
+            <canvas id="flash-canvas"></canvas>
+            <div class="stage-overlay-text" id="overlay-text">READY?</div>
+        </div>
+
+        <div class="control-panel">
+            <div class="feedback-msg" id="feedback-msg"></div>
+
+            <form class="input-group" id="answer-form" onsubmit="return false;">
+                <input type="number" id="answer-input" class="answer-input" placeholder="個数" min="1" disabled autocomplete="off">
+                <button type="submit" id="submit-btn" class="btn btn-submit" disabled>回答</button>
+            </form>
+
+            <button id="start-btn" class="btn btn-start">ゲームスタート</button>
+        </div>
+
+        <!-- ゲームオーバーモーダル -->
+        <div class="modal" id="gameover-modal">
+            <h2>GAME OVER</h2>
+            <div class="result-stage">
+                到達ステージ
+                <span id="final-stage">STAGE 1</span>
+            </div>
+            <button id="restart-btn" class="btn btn-start">もう一度挑戦する</button>
+        </div>
+    </div>
+</body>
+</html>

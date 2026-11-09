@@ -1,0 +1,315 @@
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --accent-cyan: #38bdf8;
+    --accent-pink: #f472b6;
+    --accent-amber: #fbbf24;
+    --accent-green: #34d399;
+    --accent-red: #f87171;
+    --font-heading: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-x: hidden;
+}
+
+/* 背景のアニメーション装飾 */
+.bg-decor {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.2;
+    animation: float 18s infinite ease-in-out alternate;
+}
+
+.blob-1 { width: 400px; height: 400px; background: #0284c7; top: -100px; left: -100px; }
+.blob-2 { width: 450px; height: 450px; background: #e11d48; bottom: -100px; right: -100px; animation-delay: -9s; }
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -40px) scale(1.08); }
+    100% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ポータルに戻るボタン */
+.back-to-portal {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.back-to-portal:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+/* メインゲームコンテナ */
+.game-container {
+    width: min(100%, 640px);
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    text-align: center;
+}
+
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+header h1 span {
+    color: var(--accent-pink);
+}
+
+.game-desc {
+    color: var(--text-sub);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+/* ステータス表示 */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-sub);
+    letter-spacing: 0.1em;
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.lives-value {
+    color: var(--accent-pink);
+    font-size: 1.2rem;
+}
+
+/* フラッシュエリア (キャンバス) */
+.stage-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #020617;
+    border: 2px solid rgba(56, 189, 248, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#flash-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.stage-overlay-text {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-amber);
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+/* 入力＆操作エリア */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.answer-input {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.answer-input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+}
+
+.btn-submit {
+    background: var(--accent-cyan);
+    color: #0f172a;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #0284c7;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-start {
+    width: 100%;
+    max-width: 320px;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent-pink), #e11d48);
+    color: #fff;
+    font-size: 1.15rem;
+    box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.4);
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(225, 29, 72, 0.6);
+}
+
+/* フィードバックメッセージ */
+.feedback-msg {
+    min-height: 28px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.feedback-msg.correct { color: var(--accent-green); }
+.feedback-msg.wrong { color: var(--accent-red); }
+
+/* ゲームオーバーモーダル */
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal h2 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--accent-pink);
+    margin-bottom: 12px;
+}
+
+.result-stage {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--text-sub);
+    margin-bottom: 24px;
+}
+
+.result-stage span {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-amber);
+    display: block;
+    margin-top: 4px;
+}

@@ -88,3 +88,6 @@ body { background-color: var(--bg-dark); color: var(--text-main); font-family: v
     .hero { padding: 40px 10px 40px; }
     .cards-grid { grid-template-columns: 1fr; }
 }
+
+.card-flash::before { background: linear-gradient(90deg, #fbbf24, #f472b6); }
+.card-flash .play-btn:hover { background: #d97706; border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
