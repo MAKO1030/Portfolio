@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ローマ字タイピングで敵ロケットを撃ち落とすゲーム TYPE ARENA">
+    <title>TYPE ARENA - ROCKET DEFENSE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+<body><a href="../index.html" class="back-to-portal" style="position:absolute;top:15px;left:15px;color:#64e4dc;text-decoration:none;font-weight:bold;font-size:13px;z-index:99;padding:6px 12px;background:rgba(15,23,42,0.8);border:1px solid rgba(100,228,220,0.3);border-radius:8px;">← MAKOの遊び場へ戻る</a>
+    <div class="starfield"></div>
+    <div class="scanlines"></div>
+
+    <main class="app">
+        <header class="header">
+            <a class="logo" href="#">
+                <span class="logo-mark">T</span>
+                <span>TYPE<span class="logo-accent">ARENA</span></span>
+            </a>
+            <div class="header-status"><span class="status-dot"></span> DEFENSE SYSTEM ONLINE</div>
+        </header>
+
+        <section class="hero">
+            <p class="eyebrow">EMERGENCY ALERT / ROCKET DEFENSE SYSTEM</p>
+            <h1>ROCKET <span>DEFENSE</span></h1>
+            <p>敵ロケットのコードを入力して撃墜し、基地が破壊されるまで守り抜け。</p>
+        </section>
+
+        <section class="game-shell">
+            <div class="top-bar">
+                <div class="mission-info">
+                    <span class="section-label">CURRENT MISSION</span>
+                    <strong id="mission-state">STANDBY</strong>
+                </div>
+                <div class="difficulty" role="group" aria-label="難易度">
+                    <button class="mode-button active" data-mode="easy">EASY</button>
+                    <button class="mode-button" data-mode="normal">NORMAL</button>
+                    <button class="mode-button" data-mode="hard">HARD</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat"><span>SCORE</span><strong id="score">00000</strong></div>
+                <div class="stat"><span>DESTROYED</span><strong id="destroyed">0</strong></div>
+                <div class="stat"><span>COMBO</span><strong id="combo">0</strong></div>
+                <div class="stat base-stat"><span>BASE HP</span><strong id="base-hp">5</strong><small>/ 5</small></div>
+            </div>
+
+            <div class="battlefield" id="battlefield">
+                <div class="battlefield-header">
+                    <span><i class="live-dot"></i> LIVE BATTLEFIELD</span>
+                    <span id="wave-label">WAVE 01</span>
+                </div>
+
+                <div class="space-scene">
+                    <div class="planet planet-one"></div>
+                    <div class="planet planet-two"></div>
+                    <div class="battle-lines"></div>
+                    <div class="base fortress" id="fortress" aria-label="防衛要塞">
+                        <div class="fortress-hp">
+                            <span>FORTRESS ARMOR</span>
+                            <div class="fortress-hp-track">
+                                <div id="base-hp-fill"></div>
+                            </div>
+                        </div>
+                        <div class="fortress-tower tower-left">
+                            <i></i>
+                        </div>
+                        <div class="fortress-tower tower-right">
+                            <i></i>
+                        </div>
+                        <div class="fortress-command">
+                            <div class="command-window"></div>
+                            <div class="command-antenna"></div>
+                        </div>
+                        <div class="fortress-wall">
+                            <div class="wall-panel panel-left"></div>
+                            <div class="wall-panel panel-center"></div>
+                            <div class="wall-panel panel-right"></div>
+                            <div class="fortress-lights"></div>
+                        </div>
+                        <div class="fortress-label">DEFENSE FORTRESS</div>
+                    </div>
+                    <div class="rocket-lane" id="rocket-lane">
+                        <div class="rocket" id="rocket">
+                            <div class="rocket-flame"></div>
+                            <div class="rocket-body"></div>
+                            <div class="rocket-window"></div>
+                            <div class="rocket-fin fin-left"></div>
+                            <div class="rocket-fin fin-right"></div>
+                        </div>
+                        <div class="rocket-target" id="rocket-target">
+                            <span class="target-caption">TARGET CODE</span>
+                            <strong id="target-word">READY?</strong>
+                            <div class="target-progress"><div id="target-progress-bar"></div></div>
+                        </div>
+                    </div>
+                    <div class="explosion hidden" id="explosion">✹</div>
+                    <div class="battle-message" id="battle-message">STARTを押して防衛を開始！</div>
+                    <div class="ground-line"></div>
+                </div>
+
+                <div class="typing-console">
+                    <div class="console-heading">
+                        <span><i class="live-dot"></i> INTERCEPT CODE</span>
+                        <span id="word-counter">TARGET 0</span>
+                    </div>
+                    <div class="japanese-word" id="japanese-word">敵ロケットを待機中</div>
+                    <div class="reading-hint" id="reading-hint">START GAME を押してください</div>
+                    <div class="input-box" id="input-box">
+                        <span class="prompt">&gt;_</span>
+                        <input id="typing-input" type="text" placeholder="ローマ字を入力..." autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
+                        <span class="input-state" id="input-state">WAITING</span>
+                    </div>
+                    <div class="input-feedback" id="feedback" aria-live="polite">正しいローマ字を入力するとロケットを撃墜できます。</div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button class="start-button" id="start-button"><span>▶</span> <b id="start-label">START GAME</b></button>
+                <button class="reset-button" id="reset-button">RESET</button>
+            </div>
+        </section>
+
+        <section class="guide-grid">
+            <article class="guide-card"><span class="guide-icon">⌨</span><div><h3>TYPE TO DESTROY</h3><p>敵ロケットに表示された言葉を入力。正解するとロケットを撃墜します。</p></div></article>
+            <article class="guide-card"><span class="guide-icon">✦</span><div><h3>ROMAJI FLEXIBILITY</h3><p>「し＝shi / si」など、複数のローマ字入力に対応しています。</p></div></article>
+            <article class="guide-card"><span class="guide-icon">♥</span><div><h3>PROTECT YOUR BASE</h3><p>敵ロケットが基地に接近。基地HPが0になる前に、すべて撃墜しよう。</p></div></article>
+        </section>
+
+        <footer class="footer"><span>TYPE ARENA / ROCKET DEFENSE</span><span>FOCUS · SPEED · ACCURACY</span></footer>
+    </main>
+
+    <div class="modal-backdrop hidden" id="result-modal">
+        <section class="result-modal" role="dialog" aria-modal="true" aria-labelledby="result-title">
+            <p class="eyebrow">DEFENSE REPORT</p>
+            <h2 id="result-title">MISSION <span>RESULT</span></h2>
+            <div class="result-rank" id="result-rank">WELL DONE!</div>
+            <div class="result-grid">
+                <div><span>SCORE</span><strong id="result-score">0</strong></div>
+                <div><span>DESTROYED</span><strong id="result-destroyed">0</strong></div>
+                <div><span>MAX COMBO</span><strong id="result-combo">0</strong></div>
+                <div><span>BASE HP</span><strong id="result-hp">0</strong></div>
+            </div>
+            <button class="start-button result-retry" id="retry-button">PLAY AGAIN</button>
+        </section>
+    </div>
+</body>
+</html>

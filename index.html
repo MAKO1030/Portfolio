@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>MAKOの遊び場 | Web Game Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500;700&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Noto+Sans+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🎮</span>
+                <span class="logo-text">MAKO'S <span>PLAYGROUND</span></span>
+            </div>
+            <nav class="nav-links">
+                <a href="#works">GAMES</a>
+                <a href="#about">ABOUT</a>
+            </nav>
+        </header>
+
+        <!-- ヒーローセクション -->
+        <section class="hero">
+            <div class="hero-badge">PERSONAL PORTFOLIO</div>
+            <h1 class="hero-title">MAKOの<span>遊び場</span></h1>
+            <p class="hero-subtitle">自作のWebゲームを集めたポータルサイトです。<br>直感的に遊べるこだわりゲームをお楽しみください！</p>
+        </section>
+
+        <!-- 作品一覧セクション -->
+        <section class="works-section" id="works">
+            <h2 class="section-title">
+                <span class="title-icon">✦</span> CREATIVE WORKS
+            </h2>
+
+            <div class="cards-grid">
+                <!-- Card 1: NUMBER HUNT -->
+                <article class="game-card card-number">
+                    <div class="card-tag">BRAIN TRAINING</div>
+                    <div class="card-icon-wrap">
+                        <span class="card-emoji">🔢</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="game-title">NUMBER HUNT</h3>
+                        <p class="game-desc">並んだ数字の中から「たったひとつだけ違う数字」を見つけ出す脳トレ観察力ゲーム！正解ごとに+2マス、10問クリアごとに桁数アップ！</p>
+                        <div class="game-tags">
+                            <span>観察力</span>
+                            <span>間違い探し</span>
+                            <span>難易度変化</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="number_hunt/index.html" class="play-btn">
+                            PLAY NOW <span>→</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Card 2: COLOR CHALLENGE -->
+                <article class="game-card card-color">
+                    <div class="card-tag">SPEED & REFLEX</div>
+                    <div class="card-icon-wrap">
+                        <span class="card-emoji">🎨</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="game-title">COLOR CHALLENGE</h3>
+                        <p class="game-desc">色覚と判断力を試すカラーマッチングゲーム！画面に現れる微妙な色の違いを見抜いてハイスコアを目指そう。</p>
+                        <div class="game-tags">
+                            <span>色彩感覚</span>
+                            <span>反射神経</span>
+                            <span>スコアアタック</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="color_challenge/index.html" class="play-btn">
+                            PLAY NOW <span>→</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Card 3: TYPE ARENA -->
+                <article class="game-card card-type">
+                    <div class="card-tag">TYPING GAME</div>
+                    <div class="card-icon-wrap">
+                        <span class="card-emoji">🚀</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="game-title">TYPE ARENA</h3>
+                        <p class="game-desc">寿司打風のスピーディーで爽快なタイピング防衛ゲーム！次々と出題される単語をタイピングして基地を防衛せよ！</p>
+                        <div class="game-tags">
+                            <span>タイピング</span>
+                            <span>シューティング風</span>
+                            <span>爽快感</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="type_arena/index.html" class="play-btn">
+                            PLAY NOW <span>→</span>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Aboutセクション -->
+        <section class="about-section" id="about">
+            <div class="about-card">
+                <div class="about-header">
+                    <span class="about-avatar">👾</span>
+                    <div>
+                        <h3 class="about-name">ABOUT THIS SITE</h3>
+                        <p class="about-role">Web Game Developer / Creator</p>
+                    </div>
+                </div>
+                <p class="about-text">
+                    「MAKOの遊び場」へようこそ！ここは個人製作したJavaScriptゲームを統合したポートフォリオサイトです。
+                    オリジナルソースコードをそのまま組み込み、洗練されたダークネオンデザインで各作品へシームレスにアクセスできます。
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">HTML5</span>
+                    <span class="tech-badge">CSS3 / Grid & Flexbox</span>
+                    <span class="tech-badge">JavaScript (ES6+)</span>
+                    <span class="tech-badge">Web Audio API</span>
+                    <span class="tech-badge">Responsive Design</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="footer">
+            <p>© 2026 MAKO'S PLAYGROUND. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色覚チャレンジ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+<body><a href="../index.html" class="back-to-portal" style="position:absolute;top:15px;left:15px;color:#64e4dc;text-decoration:none;font-weight:bold;font-size:13px;z-index:99;padding:6px 12px;background:rgba(15,23,42,0.8);border:1px solid rgba(100,228,220,0.3);border-radius:8px;">← MAKOの遊び場へ戻る</a>
+    <main class="game">
+        <header class="header">
+            <p class="eyebrow">COLOR CHALLENGE</p>
+            <h1>色覚チャレンジ</h1>
+            <p class="subtitle">ひとつだけ違う色を見つけよう。</p>
+        </header>
+
+        <section class="status-panel" aria-label="ゲーム状況">
+            <div class="status-item">
+                <span class="status-label">STAGE</span>
+                <strong id="stage">1</strong>
+            </div>
+            <div class="status-item timer-item">
+                <span class="status-label">TIME</span>
+                <strong><span id="time">10.0</span><small> 秒</small></strong>
+            </div>
+            <div class="status-item">
+                <span class="status-label">LIVES</span>
+                <strong id="lives" class="lives" aria-label="残りライフ 3">♥ ♥ ♥</strong>
+            </div>
+            <div class="status-item">
+                <span class="status-label">BEST</span>
+                <strong id="best">0</strong>
+            </div>
+            <div class="status-item difference-item">
+                <span class="status-label">色の差</span>
+                <strong id="color-difference">48</strong>
+            </div>
+        </section>
+
+        <div class="timer-track" aria-hidden="true">
+            <div id="timer-bar" class="timer-bar"></div>
+        </div>
+
+        <section class="play-area">
+            <div class="instruction-row">
+                <h2 id="instruction">違う色の丸を選んでください</h2>
+                <span id="circle-count" class="count-pill">4 個</span>
+            </div>
+            <div id="grid" class="circle-grid" aria-label="色を選択するエリア"></div>
+            <p id="feedback" class="feedback" aria-live="polite">よく見て、ひとつだけ違う色を探そう！</p>
+        </section>
+
+        <section class="bottom-info">
+            <div><span class="legend-dot"></span> 正解は毎回ランダムな位置に出現します</div>
+            <div>制限時間は各ステージ <strong>10秒</strong></div>
+        </section>
+    </main>
+
+    <div id="overlay" class="overlay">
+        <div class="dialog">
+            <p class="dialog-kicker">CAN YOU FIND IT?</p>
+            <h2 id="dialog-title">色の違いを<br>見つけられる？</h2>
+            <p id="dialog-message">ステージが進むほど、色の違いは小さくなります。<br>10秒以内に違う色の丸を見つけよう！</p>
+            <button id="start-button" class="primary-button">ゲームスタート</button>
+        </div>
+    </div>
+</body>
+</html>

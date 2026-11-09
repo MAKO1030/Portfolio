@@ -1,0 +1,633 @@
+/* =========================================
+   TYPE ARENA : ROCKET DEFENSE
+   ========================================= */
+
+:root {
+    --bg: #050a15;
+    --panel: rgba(12, 23, 42, .94);
+    --cyan: #48eaff;
+    --blue: #4d8fff;
+    --purple: #a783ff;
+    --text: #edf8ff;
+    --muted: #8498b2;
+    --line: rgba(91, 191, 255, .22);
+    --green: #6cffb5;
+    --red: #ff647f;
+    --yellow: #ffd36a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at 50% -20%, #1b3862 0, transparent 48%),
+        linear-gradient(145deg, #050a15, #0a1426 58%, #070d1b);
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+button, input { font: inherit; }
+button { color: inherit; }
+
+.starfield {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    opacity: .55;
+    background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 99%, transparent),
+        radial-gradient(1px 1px at 30% 70%, #7edfff 99%, transparent),
+        radial-gradient(2px 2px at 75% 30%, #fff 99%, transparent),
+        radial-gradient(1px 1px at 90% 80%, #8bbaff 99%, transparent),
+        radial-gradient(1px 1px at 55% 15%, #fff 99%, transparent);
+    background-size: 230px 190px, 280px 230px, 330px 260px, 210px 270px, 300px 200px;
+}
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: .08;
+    background: repeating-linear-gradient(0deg, transparent 0 3px, #8beaff 4px);
+}
+
+.app { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font: 800 16px "Orbitron", sans-serif;
+    letter-spacing: 1px;
+}
+.logo-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 9px;
+    color: #06121e;
+    background: var(--cyan);
+    box-shadow: 0 0 24px #48eaff66;
+}
+.logo-accent, .hero h1 span, .result-modal h2 span { color: var(--cyan); }
+
+.header-status, .eyebrow, .section-label, .stat span, .battlefield-header,
+.console-heading, .target-caption, .input-state, .guide-card h3, .footer {
+    font-family: "Orbitron", sans-serif;
+    letter-spacing: 1.2px;
+}
+.header-status { color: var(--muted); font-size: 9px; }
+.status-dot, .live-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+}
+
+.hero { padding: 38px 0 27px; text-align: center; }
+.eyebrow { margin: 0 0 10px; color: var(--cyan); font-size: 9px; }
+.hero h1 {
+    margin: 0;
+    font: 900 clamp(36px, 7vw, 66px)/1.2 "Orbitron", sans-serif;
+    letter-spacing: 4px;
+    text-shadow: 0 0 35px #48eaff25;
+}
+.hero > p:last-child { margin: 12px 0 0; color: #a8bad0; font-size: 13px; }
+
+.game-shell {
+    padding: 22px;
+    border: 1px solid rgba(81, 191, 255, .3);
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(17, 33, 57, .97), rgba(7, 15, 29, .98));
+    box-shadow: 0 25px 80px #0007, inset 0 1px #ffffff0a;
+}
+
+.top-bar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 18px; }
+.section-label { display: block; margin-bottom: 4px; color: var(--cyan); font-size: 8px; }
+.mission-info strong { font: 700 13px "Orbitron", sans-serif; letter-spacing: 1px; }
+.difficulty { display: flex; gap: 5px; padding: 4px; border: 1px solid var(--line); border-radius: 9px; background: #030a16aa; }
+.mode-button {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    font: 600 9px "Orbitron", sans-serif;
+}
+.mode-button.active, .mode-button:hover { color: #04121c; background: var(--cyan); box-shadow: 0 0 15px #48eaff33; }
+
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; margin-bottom: 15px; }
+.stat {
+    min-width: 0;
+    padding: 11px 14px;
+    border: 1px solid #70b5e51c;
+    border-radius: 9px;
+    background: #040c1a9c;
+}
+.stat span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 8px; }
+.stat strong { font: 700 clamp(19px, 3vw, 25px) "Orbitron", sans-serif; color: var(--cyan); }
+.stat small { margin-left: 4px; color: var(--muted); font: 8px "Orbitron", sans-serif; }
+.stat:nth-child(2) strong { color: #fff; }
+.stat:nth-child(3) strong { color: var(--green); }
+.stat:nth-child(4) strong { color: var(--purple); }
+.base-stat strong { color: var(--yellow); }
+
+.battlefield {
+    overflow: hidden;
+    border: 1px solid rgba(69, 206, 255, .28);
+    border-radius: 13px;
+    background: #050d1b;
+}
+.battlefield-header, .console-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 15px;
+    color: #a6bbd2;
+    background: #0d1c31;
+    font-size: 8px;
+}
+.battlefield-header > span:last-child { color: var(--yellow); }
+
+.space-scene {
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 75% 28%, #19345a66, transparent 40%),
+        linear-gradient(180deg, #09172b, #0b1b31 70%, #10213a);
+}
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .55;
+    filter: blur(.2px);
+}
+.planet-one {
+    top: 26px; right: 13%;
+    width: 63px; height: 63px;
+    background: radial-gradient(circle at 30% 28%, #b7d9ff, #4775a8 38%, #1a3151 72%);
+    box-shadow: 0 0 35px #4b91d755;
+}
+.planet-two {
+    top: 110px; left: 9%;
+    width: 20px; height: 20px;
+    background: radial-gradient(circle at 30% 30%, #b9c9ff, #5969a5 65%, #222f57);
+}
+.battle-lines {
+    position: absolute;
+    inset: 0;
+    opacity: .16;
+    background: repeating-linear-gradient(0deg, transparent 0 39px, #6bcaff 40px), repeating-linear-gradient(90deg, transparent 0 59px, #6bcaff 60px);
+}
+.ground-line {
+    position: absolute;
+    right: 0; bottom: 39px; left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #49dfffaa, transparent);
+    box-shadow: 0 0 12px #48eaff;
+}
+.base { position: absolute; bottom: 40px; left: 8%; width: 105px; height: 65px; }
+.base-body {
+    position: absolute; bottom: 0; left: 0;
+    width: 105px; height: 37px;
+    border: 2px solid #4ccfff;
+    border-radius: 8px 8px 3px 3px;
+    background: linear-gradient(145deg, #235b83, #102a48);
+    box-shadow: 0 0 22px #48eaff44;
+}
+.base-dome {
+    position: absolute; bottom: 31px; left: 30px;
+    width: 45px; height: 30px;
+    border: 2px solid #65eaff;
+    border-bottom: 0;
+    border-radius: 40px 40px 0 0;
+    background: linear-gradient(#64eaff, #1b5277);
+}
+.base-label {
+    position: absolute; bottom: -18px; left: 19px;
+    color: #6ccfff; font: 8px "Orbitron", sans-serif; letter-spacing: 1px;
+}
+.rocket-lane {
+    position: absolute;
+    top: 50%; left: 20%;
+    width: 69%; height: 2px;
+    transform: translateY(-50%);
+    transition: left .15s linear;
+}
+.rocket {
+    position: absolute;
+    top: -18px; left: 0;
+    width: 82px; height: 37px;
+    filter: drop-shadow(0 0 12px #ff725c99);
+    transform: rotate(180deg);
+    transition: left .12s linear;
+}
+.rocket-body {
+    position: absolute; top: 7px; left: 15px;
+    width: 53px; height: 23px;
+    border: 1px solid #ffb1a0;
+    border-radius: 50% 45% 45% 50%;
+    background: linear-gradient(180deg, #ffb09b, #d64b50 55%, #7d263c);
+}
+.rocket-body::after {
+    content: ""; position: absolute; top: 5px; right: 10px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #5ceaff; box-shadow: 0 0 9px #5ceaff;
+}
+.rocket-window {
+    position: absolute; top: 12px; left: 49px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #bdfaff; box-shadow: 0 0 8px #bdfaff;
+}
+.rocket-flame {
+    position: absolute; top: 13px; left: 0;
+    width: 22px; height: 11px;
+    border-radius: 50% 0 0 50%;
+    background: linear-gradient(90deg, transparent, #ffda68, #ff5c48);
+    animation: flame .12s infinite alternate;
+}
+.rocket-fin {
+    position: absolute; top: 3px;
+    width: 17px; height: 12px;
+    background: #a9384a; border: 1px solid #ff8e87;
+}
+.fin-left { left: 20px; transform: skewY(28deg); }
+.fin-right { left: 20px; top: 24px; transform: skewY(-28deg); }
+@keyframes flame { to { transform: scaleX(1.35); filter: brightness(1.4); } }
+
+.rocket-target {
+    position: absolute;
+    top: -80px; left: 40px;
+    min-width: 170px;
+    padding: 9px 12px;
+    border: 1px solid #ff8c7b99;
+    border-radius: 8px;
+    background: #271b2bdc;
+    box-shadow: 0 0 18px #ff5f5f22;
+    text-align: center;
+}
+.target-caption { display: block; margin-bottom: 4px; color: #ff9a8e; font-size: 7px; }
+.rocket-target strong { color: #fff; font: 700 14px "Orbitron", sans-serif; letter-spacing: 1px; }
+.target-progress { height: 3px; margin-top: 7px; overflow: hidden; background: #ffffff22; }
+#target-progress-bar { width: 0; height: 100%; background: var(--green); transition: width .1s; }
+.battle-message {
+    position: absolute; right: 15px; bottom: 13px;
+    color: #a7c3de; font-size: 10px;
+}
+.explosion {
+    position: absolute; top: 42%; left: 50%;
+    color: #ffe17d; font-size: 80px;
+    text-shadow: 0 0 20px #ff6d43, 0 0 45px #ff6d43;
+    transform: translate(-50%, -50%);
+    animation: explode .4s ease-out both;
+    pointer-events: none;
+}
+.explosion.hidden { display: none; }
+@keyframes explode {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(.2) rotate(0); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(1.6) rotate(80deg); }
+}
+.space-scene.hit { animation: shake .25s linear; }
+@keyframes shake { 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-3px); } }
+
+.typing-console { padding: 0 18px 15px; background: #081426; }
+.console-heading { margin: 0 -18px; }
+.console-heading span:last-child { color: var(--yellow); }
+.japanese-word {
+    margin: 15px 0 2px;
+    text-align: center;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+.reading-hint {
+    min-height: 20px;
+    margin-bottom: 12px;
+    color: var(--cyan);
+    text-align: center;
+    font: 11px "Orbitron", sans-serif;
+    letter-spacing: 1px;
+    overflow-wrap: anywhere;
+}
+.input-box {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 14px;
+    border: 1px solid #48eaff77;
+    border-radius: 9px;
+    background: #030a16;
+    box-shadow: 0 0 18px #48eaff13;
+}
+.input-box.error { border-color: var(--red); animation: shake .18s linear; }
+.prompt { color: var(--cyan); font: 15px "Orbitron", sans-serif; }
+#typing-input {
+    width: 100%; min-width: 0; height: 52px;
+    border: 0; outline: 0; color: #fff; background: transparent;
+    font: 15px "Orbitron", sans-serif; letter-spacing: 1px;
+}
+#typing-input::placeholder { color: #566a83; font: 12px "Noto Sans JP", sans-serif; }
+.input-state { flex-shrink: 0; color: var(--muted); font-size: 7px; }
+.input-feedback { min-height: 19px; padding-top: 9px; color: var(--muted); text-align: center; font-size: 10px; }
+.input-feedback.good { color: var(--green); }
+.input-feedback.bad { color: var(--red); }
+
+.game-controls { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+.start-button, .reset-button {
+    display: inline-flex; justify-content: center; align-items: center; gap: 9px;
+    min-width: 190px; padding: 14px 22px;
+    border: 0; border-radius: 8px; cursor: pointer;
+    font: 700 11px "Orbitron", sans-serif; letter-spacing: 1px;
+    transition: .2s;
+}
+.start-button { color: #03111b; background: linear-gradient(110deg, #49eaff, #5c9bff); box-shadow: 0 8px 25px #39baff33; }
+.start-button:hover { transform: translateY(-2px); box-shadow: 0 12px 30px #39baff55; }
+.start-button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.reset-button { min-width: 100px; border: 1px solid var(--line); color: #a9bdd4; background: #ffffff08; }
+.reset-button:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+.guide-card { display: flex; gap: 12px; padding: 16px; border: 1px solid #70b5e51c; border-radius: 10px; background: #0c172a99; }
+.guide-icon { color: var(--cyan); font-size: 21px; }
+.guide-card h3 { margin: 2px 0 6px; font-size: 9px; }
+.guide-card p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+.footer { display: flex; justify-content: space-between; padding: 22px 0 28px; color: #60738c; font-size: 8px; }
+
+.modal-backdrop {
+    position: fixed; inset: 0; z-index: 20;
+    display: grid; place-items: center; padding: 18px;
+    background: #020610d9; backdrop-filter: blur(9px);
+}
+.modal-backdrop.hidden { display: none; }
+.result-modal {
+    width: min(480px, 100%); padding: 30px;
+    border: 1px solid #48eaff66; border-radius: 16px;
+    background: linear-gradient(145deg, #152b49, #081426);
+    box-shadow: 0 25px 90px #0009; text-align: center;
+}
+.result-modal h2 { margin: 0; font: 800 27px "Orbitron", sans-serif; letter-spacing: 2px; }
+.result-rank { margin: 14px 0 20px; color: var(--green); font: 700 13px "Orbitron", sans-serif; letter-spacing: 2px; }
+.result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 20px; }
+.result-grid div { padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #030a1680; }
+.result-grid span { display: block; margin-bottom: 6px; color: var(--muted); font: 8px "Orbitron", sans-serif; }
+.result-grid strong { font: 700 22px "Orbitron", sans-serif; }
+.result-retry { width: 100%; }
+
+@media (max-width: 760px) {
+    .app { width: min(100% - 26px, 620px); }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .guide-grid { grid-template-columns: 1fr; }
+    .space-scene { height: 235px; }
+}
+@media (max-width: 480px) {
+    .header { padding: 17px 0; }
+    .logo { font-size: 13px; }
+    .header-status { max-width: 120px; font-size: 7px; text-align: right; }
+    .hero { padding: 32px 0 22px; }
+    .hero h1 { letter-spacing: 1px; }
+    .hero > p:last-child { font-size: 11px; }
+    .game-shell { padding: 13px; }
+    .top-bar { align-items: flex-start; flex-direction: column; }
+    .difficulty { width: 100%; }
+    .mode-button { flex: 1; }
+    .stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .stat { padding: 9px; }
+    .stat span { font-size: 7px; }
+    .stat strong { font-size: 17px; }
+    .space-scene { height: 215px; }
+    .base { left: 4%; transform: scale(.8); transform-origin: bottom left; }
+    .rocket-lane { left: 8%; width: 84%; }
+    .rocket-target { left: 28px; min-width: 140px; }
+    .typing-console { padding-right: 10px; padding-left: 10px; }
+    .console-heading { margin-right: -10px; margin-left: -10px; }
+    #typing-input { font-size: 13px; }
+    .input-box { gap: 7px; padding: 0 9px; }
+    .input-state { font-size: 6px; }
+    .game-controls { flex-direction: column; }
+    .start-button, .reset-button { width: 100%; }
+    .footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+
+
+/* =========================================
+   DEFENSE FORTRESS : 要塞型基地
+   ========================================= */
+
+.base.fortress {
+    z-index: 3;
+    left: 4.5%;
+    bottom: 40px;
+    width: 158px;
+    height: 112px;
+    transform: none;
+    transform-origin: bottom left;
+    filter: drop-shadow(0 0 15px #35cfff55);
+    transition: filter .2s ease;
+}
+
+.fortress-hp {
+    position: absolute;
+    top: 0;
+    left: 7px;
+    width: 142px;
+    color: #9deeff;
+    font: 700 6px "Orbitron", sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 0 7px #48eaff;
+}
+
+.fortress-hp-track {
+    height: 5px;
+    margin-top: 4px;
+    overflow: hidden;
+    border: 1px solid #63dfff99;
+    border-radius: 5px;
+    background: #06101d;
+}
+
+#base-hp-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #36e7ff, #77ffc4);
+    box-shadow: 0 0 9px #48eaff;
+    transition: width .25s ease, background .25s ease;
+}
+
+.fortress.critical #base-hp-fill {
+    background: linear-gradient(90deg, #ff536f, #ffbd69);
+    box-shadow: 0 0 10px #ff536f;
+}
+
+.fortress-wall {
+    position: absolute;
+    left: 5px;
+    bottom: 0;
+    width: 148px;
+    height: 47px;
+    border: 2px solid #59dfff;
+    clip-path: polygon(0 18%, 8% 0, 92% 0, 100% 18%, 100% 100%, 0 100%);
+    background:
+        linear-gradient(90deg, transparent 32%, #77eaff55 33%, transparent 34%),
+        linear-gradient(180deg, #347fa5, #12324f 58%, #081a30);
+    box-shadow: inset 0 0 15px #55dfff55, 0 0 18px #48eaff55;
+}
+
+.wall-panel {
+    position: absolute;
+    top: 10px;
+    width: 29%;
+    height: 26px;
+    border: 1px solid #8cecff66;
+    background: linear-gradient(145deg, #2d6b8d, #102943);
+    box-shadow: inset 0 0 8px #5deaff33;
+}
+
+.panel-left { left: 5px; }
+.panel-center { left: 35%; width: 30%; }
+.panel-right { right: 5px; }
+
+.fortress-lights {
+    position: absolute;
+    right: 9px;
+    bottom: 5px;
+    left: 9px;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, #7ff7ff 0 5px, transparent 5px 13px);
+    filter: drop-shadow(0 0 4px #48eaff);
+}
+
+.fortress-tower {
+    position: absolute;
+    bottom: 39px;
+    width: 31px;
+    height: 42px;
+    border: 2px solid #63ddff;
+    background: linear-gradient(145deg, #397da1, #102b48 70%);
+    box-shadow: inset 0 0 9px #72eaff44, 0 0 12px #48eaff33;
+}
+
+.fortress-tower::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: -4px;
+    width: 35px;
+    height: 8px;
+    border: 1px solid #9aefff;
+    background: linear-gradient(90deg, #4d9cbd, #183b5b);
+}
+
+.fortress-tower i {
+    position: absolute;
+    top: -13px;
+    left: 12px;
+    width: 7px;
+    height: 12px;
+    border: 1px solid #b1f5ff;
+    border-radius: 3px 3px 0 0;
+    background: #315f7d;
+    box-shadow: 0 0 8px #48eaff;
+}
+
+.tower-left { left: 9px; }
+.tower-right { right: 9px; }
+
+.fortress-command {
+    position: absolute;
+    z-index: 2;
+    bottom: 68px;
+    left: 57px;
+    width: 45px;
+    height: 28px;
+    border: 2px solid #7deaff;
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+    background: linear-gradient(180deg, #4a9cbd, #153d5e);
+    box-shadow: 0 0 15px #48eaff66;
+}
+
+.command-window {
+    position: absolute;
+    top: 7px;
+    left: 13px;
+    width: 15px;
+    height: 8px;
+    border: 1px solid #c0faff;
+    background: #65edff;
+    box-shadow: 0 0 8px #65edff;
+}
+
+.command-antenna {
+    position: absolute;
+    top: -12px;
+    left: 21px;
+    width: 2px;
+    height: 13px;
+    background: #9cefff;
+}
+
+.command-antenna::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8af7ff;
+    box-shadow: 0 0 9px #8af7ff;
+}
+
+.fortress-label {
+    position: absolute;
+    right: 0;
+    bottom: -17px;
+    left: 0;
+    color: #79dcff;
+    font: 700 7px "Orbitron", sans-serif;
+    letter-spacing: .8px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.base.fortress.fortress-hit {
+    animation: fortress-impact .32s ease-out;
+}
+
+@keyframes fortress-impact {
+    0%, 100% { filter: drop-shadow(0 0 15px #35cfff55); }
+    35% { filter: drop-shadow(0 0 24px #ff526f) brightness(1.8); }
+    65% { filter: drop-shadow(0 0 16px #ff9c58) brightness(1.25); }
+}
+
+@media (max-width: 480px) {
+    .base.fortress {
+        left: 2.5%;
+        transform: scale(.78);
+        transform-origin: bottom left;
+    }
+}

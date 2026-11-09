@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10172b">
+    <title>NUMBER HUNT | 数字の違和感を探せ！</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="app-shell">
+        <header class="topbar"><a href="../index.html" class="back-to-portal" style="display:inline-flex;align-items:center;gap:6px;color:#64e4dc;text-decoration:none;font-weight:bold;font-size:12px;margin-right:12px;padding:6px 10px;border:1px solid rgba(100,228,220,0.3);border-radius:8px;background:rgba(100,228,220,0.05);">← ポータルへ戻る</a>
+            <a class="brand" href="#" aria-label="NUMBER HUNT ホーム">
+                <span class="brand-mark">N</span>
+                <span>NUMBER <b>HUNT</b></span>
+            </a>
+            <div class="top-actions">
+                <button class="icon-button active" id="sound-toggle" type="button" aria-label="効果音をオフにする" title="効果音">♫</button>
+                <button class="icon-button" id="help-button" type="button" aria-label="遊び方">?</button>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="eyebrow"><span class="live-dot"></span> DAILY BRAIN TRAINING</div>
+            <h1>数字の<span>違和感</span>を探せ！</h1>
+            <p class="hero-copy">並んだ数字の中から、たったひとつの違いを見つけ出そう。</p>
+        </section>
+
+        <section class="stats-panel" aria-label="ゲーム状況">
+            <div class="stat-card">
+                <span class="stat-label">STAGE</span>
+                <strong id="stage-value">01</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">SCORE</span>
+                <strong id="score-value">0000</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">BEST STAGE</span>
+                <strong id="best-value">01</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">MAX COUNT</span>
+                <strong id="max-count-value">04</strong>
+            </div>
+            <div class="stat-card lives-card">
+                <span class="stat-label">LIVES</span>
+                <strong id="lives-value" aria-label="残りライフ">♥ ♥ ♥</strong>
+            </div>
+        </section>
+
+        <section class="game-card">
+            <div class="game-card-top">
+                <div>
+                    <span class="section-kicker">FIND THE ODD NUMBER</span>
+                    <h2 id="prompt-title">違う数字はどれ？</h2>
+                </div>
+                <div class="timer-wrap">
+                    <div class="timer-text"><span>TIME</span><strong id="timer-value">15.0</strong></div>
+                    <div class="timer-track"><div id="timer-bar"></div></div>
+                </div>
+            </div>
+
+            <div class="instruction-row">
+                <span class="instruction-icon">◎</span>
+                <span id="instruction-text">4個の数字から違うものを探そう！</span>
+                <span class="difficulty-chip" id="difficulty-label">STAGE 1 · EASY</span>
+            </div>
+
+            <div class="number-board" id="number-board" aria-label="数字の選択エリア">
+                <div class="loading-message">準備中...</div>
+            </div>
+
+            <div class="feedback" id="feedback" aria-live="polite">
+                <span class="feedback-symbol">✦</span>
+                <span id="feedback-text">違う数字を見つけよう！</span>
+            </div>
+
+            <div class="game-footer">
+                <div class="progress-copy">
+                    <span>ROUND PROGRESS</span>
+                    <strong id="progress-text">0 / 10</strong>
+                </div>
+                <div class="progress-track"><div id="progress-bar"></div></div>
+            </div>
+        </section>
+
+        <section class="bottom-row">
+            <div class="tip-card">
+                <span class="tip-icon">✧</span>
+                <p><b>HINT</b>　正解するたびにマス数が2増加！桁数の微細な違いに注目。</p>
+            </div>
+            <button class="text-button" id="restart-button" type="button">↻ 最初からやり直す</button>
+        </section>
+
+        <footer class="footer">
+            <span>NUMBER HUNT</span>
+            <span>TRAIN YOUR EYES. TRUST YOUR INSTINCT.</span>
+        </footer>
+    </main>
+
+    <div class="overlay hidden" id="start-overlay">
+        <div class="modal start-modal">
+            <div class="modal-emblem">N</div>
+            <span class="section-kicker">READY TO HUNT?</span>
+            <h2>違和感を、見逃すな。</h2>
+            <p>同じ数字が並ぶ中に、ひとつだけ違う数字が隠れています。見つけたらクリック！</p>
+            <div class="rules-grid">
+                <div><b>15秒</b><span>各ラウンドの制限時間</span></div>
+                <div><b>3 ♥</b><span>間違えられる回数</span></div>
+                <div><b>10問</b><span>1ステージの問題数</span></div>
+            </div>
+            <button class="primary-button" id="start-button" type="button">ゲームスタート <span>→</span></button>
+            <small>1問正解で+2マス！10問正解で1桁追加（最大5桁）！</small>
+        </div>
+    </div>
+
+    <div class="overlay hidden" id="result-overlay">
+        <div class="modal result-modal">
+            <div class="result-icon" id="result-icon">★</div>
+            <span class="section-kicker" id="result-kicker">STAGE CLEAR</span>
+            <h2 id="result-title">ステージクリア！</h2>
+            <p id="result-description">すばらしい観察力です。</p>
+            <div class="result-stats">
+                <div><span>今回のスコア</span><b id="result-score">0</b></div>
+                <div><span>到達ステージ</span><b id="result-stage">1</b></div>
+                <div><span>最高ステージ</span><b id="result-best">1</b></div>
+                <div><span>最大数字数</span><b id="result-max-count">4</b></div>
+            </div>
+            <button class="primary-button" id="continue-button" type="button">もう一度挑戦 <span>→</span></button>
+        </div>
+    </div>
+
+    <div class="overlay hidden" id="help-overlay">
+        <div class="modal help-modal">
+            <button class="modal-close" id="close-help" type="button" aria-label="閉じる">×</button>
+            <span class="section-kicker">HOW TO PLAY</span>
+            <h2>遊び方</h2>
+            <ol>
+                <li>並んだ数字の中から、ひとつだけ違う数字を探します。</li>
+                <li>見つけた数字をクリックすると回答できます。</li>
+                <li>1問正解するごとに数字のマスが2つ増加します（最大100マス）。</li>
+                <li>10問正解（1ステージクリア）ごとに桁数が1桁ずつ増加し、最大5桁（MASTER）まで難易度アップ！</li>
+            </ol>
+            <p class="help-note">マス数や桁数が増えても文字サイズとグリッドが自動調整され、画面をスクロールせずにプレイできます。</p>
+            <button class="primary-button" id="help-ok" type="button">わかった！</button>
+        </div>
+    </div>
+</body>
+</html>
